@@ -11,6 +11,8 @@ import { depsCommand } from './commands/deps.js';
 import { rdepsCommand } from './commands/rdeps.js';
 import { graphCommand } from './commands/graph.js';
 import { verifyCommand } from './commands/verify.js';
+import { pathCommand } from './commands/path.js';
+import { allpathsCommand } from './commands/allpaths.js';
 import { discoverCommand } from './commands/discover.js';
 import { syncCommand } from './commands/sync.js';
 
@@ -67,6 +69,12 @@ graphCommand(program);
 
 // Verify command (CLI contract verification)
 verifyCommand(program);
+
+// Path command (shortest path)
+pathCommand(program);
+
+// Allpaths command (all paths)
+allpathsCommand(program);
 
 // Discover command
 discoverCommand(program);
