@@ -51,3 +51,14 @@ export type { ToolNode, DependencyEdge, GraphJSON } from './graph/types.js';
 
 // Re-export DOT generation
 export { generateDot, type DotOptions } from './dot.js';
+
+// Re-export schema hasher
+export {
+  normalizeJson,
+  hashJson,
+  hashSchemaFile,
+  compareHashes,
+  detectFieldChanges,
+  type HashResult,
+  type DriftResult,
+} from './hasher.js';

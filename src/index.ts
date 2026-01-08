@@ -15,6 +15,7 @@ import { pathCommand } from './commands/path.js';
 import { allpathsCommand } from './commands/allpaths.js';
 import { discoverCommand } from './commands/discover.js';
 import { syncCommand } from './commands/sync.js';
+import { driftCommand } from './commands/drift.js';
 
 // Version is embedded at import time (works with bun compile)
 import packageJson from '../package.json';
@@ -81,6 +82,9 @@ discoverCommand(program);
 
 // Sync command
 syncCommand(program);
+
+// Drift command (schema drift detection)
+driftCommand(program);
 
 // Handle unknown commands
 program.on('command:*', (operands: string[]) => {
