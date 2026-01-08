@@ -87,6 +87,7 @@ debt_score: 4
 | `list` | List all registered tools |
 | `show <tool>` | Show detailed tool information |
 | `deps <tool>` | Query forward dependencies |
+| `rdeps <tool>` | Query reverse dependencies (what depends on this) |
 | `discover [roots...]` | Find all pai-manifest.yaml files |
 | `sync [roots...]` | Discover and register all manifests |
 
@@ -135,7 +136,7 @@ bun test tests/discovery.test.ts
 - [x] Forward dependency queries (deps)
 - [x] Auto-discovery (discover, sync)
 - [x] Manifest auto-generation (init --analyze)
-- [ ] Reverse dependencies (rdeps)
+- [x] Reverse dependencies (rdeps)
 - [ ] Path queries (somepath, allpaths)
 - [ ] Chain reliability calculation
 - [ ] DOT graph generation

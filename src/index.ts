@@ -8,6 +8,7 @@ import { showCommand } from './commands/show.js';
 import { unregisterCommand } from './commands/unregister.js';
 import { initCommand } from './commands/init.js';
 import { depsCommand } from './commands/deps.js';
+import { rdepsCommand } from './commands/rdeps.js';
 import { discoverCommand } from './commands/discover.js';
 import { syncCommand } from './commands/sync.js';
 
@@ -55,6 +56,9 @@ initCommand(program);
 
 // Deps command (forward dependencies)
 depsCommand(program);
+
+// Rdeps command (reverse dependencies)
+rdepsCommand(program);
 
 // Discover command
 discoverCommand(program);

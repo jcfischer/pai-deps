@@ -1,0 +1,33 @@
+# PAI Dependency Manifest (auto-generated)
+# Review and adjust as needed
+name: pai-deps
+version: 0.1.0
+type: mcp
+description: Dependency management for PAI tools - track what uses what
+
+provides:
+  cli:
+    - command: pai-deps ping
+    - command: pai-deps init <path>
+    - command: pai-deps unregister <tool>
+    - command: pai-deps discover [roots...]
+    - command: pai-deps register <path>
+    - command: pai-deps list
+    - command: pai-deps deps <tool>
+    - command: pai-deps show <tool>
+    - command: pai-deps sync [roots...]
+    - command: pai-deps search
+    - command: pai-deps show
+  mcp:
+    - tool: tool_name
+
+depends_on:
+  - name: resona
+    type: library
+  - name: email
+    type: library
+  - name: supertag
+    type: library
+
+reliability: 0.95
+debt_score: 0
