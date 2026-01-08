@@ -17,6 +17,7 @@ import { discoverCommand } from './commands/discover.js';
 import { syncCommand } from './commands/sync.js';
 import { driftCommand } from './commands/drift.js';
 import { verifyOutputCommand } from './commands/verify-output.js';
+import { affectedCommand } from './commands/affected.js';
 
 // Version is embedded at import time (works with bun compile)
 import packageJson from '../package.json';
@@ -89,6 +90,9 @@ driftCommand(program);
 
 // Verify-output command (runtime output validation)
 verifyOutputCommand(program);
+
+// Affected command (what breaks if this changes)
+affectedCommand(program);
 
 // Handle unknown commands
 program.on('command:*', (operands: string[]) => {
