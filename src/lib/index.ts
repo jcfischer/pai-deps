@@ -73,3 +73,16 @@ export {
   type ValidationResult,
   type SchemaLoadResult,
 } from './validator.js';
+
+// Re-export MCP verifier
+export {
+  startMcpServer,
+  listMcpTools,
+  verifyMcpTools,
+  verifyMcpTool,
+  type McpServer,
+  type McpTool,
+  type McpToolResult,
+  type McpVerifyResult,
+  type McpServerOptions,
+} from './mcp-verifier.js';

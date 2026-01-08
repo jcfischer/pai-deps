@@ -127,6 +127,8 @@ export const ManifestSchema = z.object({
   depends_on: z.array(DependsOnEntrySchema).optional().default([]),
   reliability: z.number().min(0).max(1).default(0.95),
   debt_score: z.number().int().min(0).default(0),
+  /** Command to start MCP server for verification (e.g., "bun run src/index.ts") */
+  mcp_start: z.string().optional(),
 });
 
 // ============================================================================
