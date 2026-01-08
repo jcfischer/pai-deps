@@ -1,0 +1,192 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PAI Manifest Schema",
+  "description": "Schema for pai-manifest.yaml - declares tool identity, provides, and dependencies",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "cli",
+        "mcp",
+        "library",
+        "workflow",
+        "hook",
+        "cli+mcp"
+      ]
+    },
+    "description": {
+      "type": "string"
+    },
+    "provides": {
+      "type": "object",
+      "properties": {
+        "cli": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "command": {
+                "type": "string",
+                "minLength": 1
+              },
+              "output_schema": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "command"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "mcp": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "tool": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "tool"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "resource": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "schema": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "resource"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "library": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "export": {
+                "type": "string",
+                "minLength": 1
+              },
+              "path": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "export"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "database": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "schema": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "path"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "depends_on": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "cli",
+              "mcp",
+              "library",
+              "database",
+              "npm",
+              "implicit"
+            ]
+          },
+          "version": {
+            "type": "string"
+          },
+          "import": {
+            "type": "string"
+          },
+          "commands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "optional": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": [
+          "name",
+          "type"
+        ],
+        "additionalProperties": false
+      },
+      "default": []
+    },
+    "reliability": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "default": 0.95
+    },
+    "debt_score": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+    }
+  },
+  "required": [
+    "name",
+    "type"
+  ],
+  "additionalProperties": false
+}
