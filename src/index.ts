@@ -21,6 +21,12 @@ import { affectedCommand } from './commands/affected.js';
 import { chainReliabilityCommand } from './commands/chain-reliability.js';
 import { verifyHistoryCommand } from './commands/verify-history.js';
 import { blastRadiusCommand } from './commands/blast-radius.js';
+import { debtCommand } from './commands/debt.js';
+import { reportCommand } from './commands/report.js';
+import { healthCommand } from './commands/health.js';
+import { speckitCommand } from './commands/speckit.js';
+import { ciCommand } from './commands/ci.js';
+import { hookCommand } from './commands/hook.js';
 
 // Version is embedded at import time (works with bun compile)
 import packageJson from '../package.json';
@@ -105,6 +111,24 @@ verifyHistoryCommand(program);
 
 // Blast radius command (impact analysis)
 blastRadiusCommand(program);
+
+// Debt command (debt aggregation)
+debtCommand(program);
+
+// Report command (comprehensive Markdown report)
+reportCommand(program);
+
+// Health command (ASCII dashboard)
+healthCommand(program);
+
+// SpecKit integration commands
+speckitCommand(program);
+
+// CI integration commands
+ciCommand(program);
+
+// Hook management commands
+hookCommand(program);
 
 // Handle unknown commands
 program.on('command:*', (operands: string[]) => {
