@@ -2,15 +2,18 @@
 
 Dependency management for PAI (Personal AI Infrastructure) tools. Track what uses what across your tool ecosystem.
 
-Inspired by Cory Doctorow's principle: "Code is a liability, not an asset."
+> "Code is a liability, not an asset." — Cory Doctorow
 
 ## Features
 
 - **Registry**: Track all tools via `pai-manifest.yaml` declarations
 - **Dependency Graph**: In-memory graph with forward/reverse queries
 - **Auto-discovery**: Find and register all manifests across directories
-- **Contract Verification**: Validate CLI and MCP tool schemas (coming soon)
-- **Impact Analysis**: Calculate blast radius and chain reliability (coming soon)
+- **Contract Verification**: Validate CLI commands and MCP tool schemas
+- **Schema Drift Detection**: Catch breaking changes before they ship
+- **Impact Analysis**: Calculate blast radius and chain reliability
+- **CI Integration**: Pre-commit hooks and CI commands
+- **Health Dashboard**: ASCII visualization of ecosystem health
 
 ## Installation
 
@@ -21,50 +24,44 @@ cd pai-deps
 bun install
 bun run build
 
-# Or run directly
-bun run src/index.ts
+# Add to PATH
+cp pai-deps ~/bin/
 ```
 
 ## Quick Start
 
 ```bash
 # Initialize a manifest for your tool
-pai-deps init ~/work/my-tool
+pai-deps init ~/work/my-tool --analyze
 
-# Register a tool
+# Register the tool
 pai-deps register ~/work/my-tool
 
-# List all registered tools
-pai-deps list
+# Check what depends on it
+pai-deps rdeps my-tool
 
-# Show tool details
-pai-deps show my-tool
+# Verify contracts work
+pai-deps verify my-tool
 
-# Query dependencies
-pai-deps deps my-tool --recursive
-
-# Discover all manifests in a directory tree
-pai-deps discover ~/work
-
-# Register all discovered manifests
-pai-deps sync ~/work
+# See ecosystem health
+pai-deps health
 ```
 
 ## Manifest Format
 
-Each tool declares its contracts in `pai-manifest.yaml`:
-
 ```yaml
+# pai-manifest.yaml
 name: email
 version: 1.2.0
 type: cli
 
 provides:
   cli:
-    - command: email search
-    - command: email send
+    - command: email search <query>
+    - command: email send <to> [--subject]
   mcp:
     - tool: email_search
+      schema: schemas/search.json
 
 depends_on:
   - name: resona
@@ -79,77 +76,117 @@ debt_score: 4
 
 ## Commands
 
+### Registry
 | Command | Description |
 |---------|-------------|
-| `init <path>` | Generate pai-manifest.yaml from package.json |
-| `register <path>` | Register a tool from its manifest |
-| `unregister <tool>` | Remove a tool from the registry |
-| `list` | List all registered tools |
-| `show <tool>` | Show detailed tool information |
-| `deps <tool>` | Query forward dependencies |
-| `rdeps <tool>` | Query reverse dependencies (what depends on this) |
-| `graph` | Generate DOT/SVG visualization of dependencies |
-| `verify [tool]` | Verify CLI contracts against actual implementations |
-| `drift [tool]` | Check for schema drift in contracts |
-| `verify-output <tool> <contract>` | Validate output against JSON schema |
-| `path <from> <to>` | Find shortest dependency path between tools |
-| `allpaths <from> <to>` | Find all dependency paths between tools |
-| `discover [roots...]` | Find all pai-manifest.yaml files |
-| `sync [roots...]` | Discover and register all manifests |
+| `init <path>` | Generate manifest from source |
+| `register <path>` | Register tool from manifest |
+| `unregister <tool>` | Remove from registry |
+| `list` | List all tools |
+| `show <tool>` | Show tool details |
+
+### Dependencies
+| Command | Description |
+|---------|-------------|
+| `deps <tool>` | Forward dependencies |
+| `rdeps <tool>` | Reverse dependencies |
+| `path <from> <to>` | Shortest path |
+| `allpaths <from> <to>` | All paths |
+| `graph` | DOT/SVG visualization |
+
+### Verification
+| Command | Description |
+|---------|-------------|
+| `verify [tool]` | Verify CLI contracts |
+| `drift [tool]` | Detect schema drift |
+| `verify-output` | Validate runtime output |
+
+### Analysis
+| Command | Description |
+|---------|-------------|
+| `blast-radius <tool>` | Impact analysis |
+| `chain-reliability` | Compound reliability |
+| `affected <tool>` | Affected tools |
+| `debt` | Technical debt report |
+| `health` | ASCII dashboard |
+| `report` | Markdown report |
+
+### CI/CD
+| Command | Description |
+|---------|-------------|
+| `ci check` | Full verification |
+| `ci check --staged` | Only staged files |
+| `ci affected` | Find affected tools |
+| `hook install` | Install pre-commit hook |
+| `hook status` | Check hook status |
 
 ### Global Options
+- `--json` — Machine-readable output
+- `-q, --quiet` — Suppress output
+- `-v, --verbose` — Debug info
 
-- `--json` - Output as JSON for scripting
-- `-q, --quiet` - Suppress non-essential output
-- `-v, --verbose` - Verbose output with debug info
+## Pre-commit Hook
+
+```bash
+# Install hook
+pai-deps hook install
+
+# With quick mode for faster commits
+pai-deps hook install --quick
+
+# Check status
+pai-deps hook status
+```
+
+The hook runs `pai-deps ci check --staged` before each commit, blocking if contracts are broken.
+
+## CI Integration
+
+```yaml
+# GitHub Actions example
+- name: Check dependencies
+  run: |
+    pai-deps sync .
+    pai-deps ci check
+```
+
+## Documentation
+
+See [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for comprehensive usage guide.
+
+## Development
+
+```bash
+# Run tests (387 tests)
+bun test
+
+# Type check
+bun run typecheck
+
+# Build binary
+bun run build
+```
 
 ## Architecture
 
 ```
 pai-deps/
 ├── src/
-│   ├── index.ts          # CLI entry point
-│   ├── types.ts          # Type definitions
-│   ├── db/               # SQLite + Drizzle ORM
-│   │   ├── schema.ts     # Database schema
-│   │   └── migrate.ts    # Migrations
-│   ├── lib/
-│   │   ├── manifest.ts   # YAML parsing + validation
-│   │   ├── registry.ts   # Tool registration
-│   │   ├── graph/        # Dependency graph algorithms
-│   │   ├── discovery.ts  # Manifest discovery
-│   │   └── analyzer.ts   # Source code analysis
-│   └── commands/         # CLI command handlers
-└── tests/                # 315 tests
+│   ├── index.ts          # CLI entry
+│   ├── db/               # SQLite + Drizzle
+│   ├── lib/              # Core logic
+│   │   ├── graph/        # Dependency algorithms
+│   │   ├── hook/         # Git hook management
+│   │   ├── ci/           # CI commands
+│   │   └── ...
+│   └── commands/         # CLI handlers
+├── tests/                # 387 tests
+└── docs/                 # Documentation
 ```
 
-## Development
+## Status
 
-```bash
-# Run tests
-bun test
-
-# Type check
-bun run typecheck
-
-# Run single test file
-bun test tests/discovery.test.ts
-```
-
-## Roadmap
-
-- [x] Core registry (register, list, show, unregister)
-- [x] Forward dependency queries (deps)
-- [x] Auto-discovery (discover, sync)
-- [x] Manifest auto-generation (init --analyze)
-- [x] Reverse dependencies (rdeps)
-- [x] DOT graph generation
-- [x] CLI contract verification
-- [x] Path queries (path, allpaths)
-- [x] Schema hashing and drift detection
-- [ ] Chain reliability calculation
-- [ ] Git pre-commit hooks
-- [ ] CI integration
+All 26 features complete. See [.specify/](.specify/) for specifications.
 
 ## License
 
