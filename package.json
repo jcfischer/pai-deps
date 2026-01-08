@@ -1,0 +1,32 @@
+{
+  "name": "pai-deps",
+  "version": "0.1.0",
+  "description": "Dependency management for PAI tools - track what uses what",
+  "type": "module",
+  "main": "src/index.ts",
+  "bin": {
+    "pai-deps": "src/index.ts"
+  },
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "build": "bun build --compile --outfile=pai-deps src/index.ts",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit",
+    "generate:schema": "bun run scripts/generate-schema.ts"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "drizzle-orm": "^0.29.0",
+    "ignore": "^7.0.5",
+    "yaml": "^2.4.0",
+    "zod": "^3.22.0",
+    "zod-to-json-schema": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.14",
+    "drizzle-kit": "^0.20.0",
+    "typescript": "^5.7.2"
+  },
+  "author": "Jens-Christian Fischer",
+  "license": "MIT"
+}
