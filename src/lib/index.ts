@@ -48,3 +48,6 @@ export {
 // Re-export dependency graph
 export { DependencyGraph } from './graph/index.js';
 export type { ToolNode, DependencyEdge, GraphJSON } from './graph/types.js';
+
+// Re-export DOT generation
+export { generateDot, type DotOptions } from './dot.js';

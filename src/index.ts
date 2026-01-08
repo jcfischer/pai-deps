@@ -9,6 +9,7 @@ import { unregisterCommand } from './commands/unregister.js';
 import { initCommand } from './commands/init.js';
 import { depsCommand } from './commands/deps.js';
 import { rdepsCommand } from './commands/rdeps.js';
+import { graphCommand } from './commands/graph.js';
 import { discoverCommand } from './commands/discover.js';
 import { syncCommand } from './commands/sync.js';
 
@@ -59,6 +60,9 @@ depsCommand(program);
 
 // Rdeps command (reverse dependencies)
 rdepsCommand(program);
+
+// Graph command (DOT/SVG visualization)
+graphCommand(program);
 
 // Discover command
 discoverCommand(program);
