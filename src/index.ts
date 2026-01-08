@@ -10,6 +10,7 @@ import { initCommand } from './commands/init.js';
 import { depsCommand } from './commands/deps.js';
 import { rdepsCommand } from './commands/rdeps.js';
 import { graphCommand } from './commands/graph.js';
+import { verifyCommand } from './commands/verify.js';
 import { discoverCommand } from './commands/discover.js';
 import { syncCommand } from './commands/sync.js';
 
@@ -63,6 +64,9 @@ rdepsCommand(program);
 
 // Graph command (DOT/SVG visualization)
 graphCommand(program);
+
+// Verify command (CLI contract verification)
+verifyCommand(program);
 
 // Discover command
 discoverCommand(program);

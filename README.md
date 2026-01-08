@@ -89,6 +89,7 @@ debt_score: 4
 | `deps <tool>` | Query forward dependencies |
 | `rdeps <tool>` | Query reverse dependencies (what depends on this) |
 | `graph` | Generate DOT/SVG visualization of dependencies |
+| `verify [tool]` | Verify CLI contracts against actual implementations |
 | `discover [roots...]` | Find all pai-manifest.yaml files |
 | `sync [roots...]` | Discover and register all manifests |
 
@@ -139,9 +140,9 @@ bun test tests/discovery.test.ts
 - [x] Manifest auto-generation (init --analyze)
 - [x] Reverse dependencies (rdeps)
 - [x] DOT graph generation
+- [x] CLI contract verification
 - [ ] Path queries (somepath, allpaths)
 - [ ] Chain reliability calculation
-- [ ] Contract verification
 - [ ] Git pre-commit hooks
 - [ ] CI integration
 
