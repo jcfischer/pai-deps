@@ -1,0 +1,15 @@
+name: tool-with-missing-dep
+version: "1.0.0"
+type: cli
+description: A tool that depends on a non-existent tool
+
+depends_on:
+  - name: nonexistent-provider
+    type: library
+    version: ">=1.0.0"
+  - name: another-missing
+    type: mcp
+    optional: true
+
+reliability: 0.90
+debt_score: 5

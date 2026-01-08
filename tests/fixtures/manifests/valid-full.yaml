@@ -1,0 +1,41 @@
+name: email
+version: "1.2.0"
+type: cli+mcp
+description: Email client with SMTP/IMAP and semantic search
+
+provides:
+  cli:
+    - command: email search
+      output_schema: ./schemas/search.json
+    - command: email stats
+      output_schema: ./schemas/stats.json
+  mcp:
+    - tool: email_search
+      schema: ./schemas/mcp-search.json
+    - resource: email://inbox
+      schema: ./schemas/inbox.json
+  library:
+    - export: createClient
+      path: ./src/client.ts
+  database:
+    - path: ~/.config/email/email.db
+      schema: ./src/db/schema.ts
+
+depends_on:
+  - name: resona
+    type: library
+    version: ">=1.0.0"
+    import: "@pai/resona"
+  - name: sqlite
+    type: database
+    optional: true
+  - name: openai
+    type: npm
+    version: "^4.0.0"
+  - name: k
+    type: cli
+    commands:
+      - k context export
+
+reliability: 0.98
+debt_score: 6

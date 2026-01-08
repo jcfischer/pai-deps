@@ -1,0 +1,13 @@
+name: existing-tool
+version: "1.0.0"
+type: cli
+description: This manifest already exists
+
+provides:
+  cli:
+    - command: existing run
+
+depends_on: []
+
+reliability: 0.95
+debt_score: 0

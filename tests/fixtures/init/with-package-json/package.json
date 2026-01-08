@@ -1,0 +1,9 @@
+{
+  "name": "@org/my-cli-tool",
+  "version": "2.5.0",
+  "description": "A CLI tool for testing",
+  "bin": {
+    "my-cli-tool": "./dist/index.js"
+  },
+  "main": "./dist/index.js"
+}

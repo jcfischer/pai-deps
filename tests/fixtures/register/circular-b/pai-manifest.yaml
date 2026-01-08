@@ -1,0 +1,8 @@
+name: circular-b
+version: "1.0.0"
+type: library
+description: Tool B in a circular dependency with Tool A
+
+depends_on:
+  - name: circular-a
+    type: library

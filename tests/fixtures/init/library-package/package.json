@@ -1,0 +1,9 @@
+{
+  "name": "my-library",
+  "version": "1.0.0",
+  "description": "A shared library",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  }
+}

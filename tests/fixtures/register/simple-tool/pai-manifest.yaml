@@ -1,0 +1,12 @@
+name: simple-tool
+version: "1.0.0"
+type: cli
+description: A simple tool with no dependencies
+
+provides:
+  cli:
+    - command: simple run
+      output_schema: ./schemas/run.json
+
+reliability: 0.95
+debt_score: 0

@@ -1,0 +1,6 @@
+{
+  "name": "tana-mcp-server",
+  "version": "0.5.0",
+  "description": "MCP server for Tana integration",
+  "main": "./dist/server.js"
+}
