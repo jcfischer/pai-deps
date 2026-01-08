@@ -19,6 +19,7 @@ import { driftCommand } from './commands/drift.js';
 import { verifyOutputCommand } from './commands/verify-output.js';
 import { affectedCommand } from './commands/affected.js';
 import { chainReliabilityCommand } from './commands/chain-reliability.js';
+import { verifyHistoryCommand } from './commands/verify-history.js';
 
 // Version is embedded at import time (works with bun compile)
 import packageJson from '../package.json';
@@ -97,6 +98,9 @@ affectedCommand(program);
 
 // Chain reliability command (compound reliability calculation)
 chainReliabilityCommand(program);
+
+// Verify history command (verification history query)
+verifyHistoryCommand(program);
 
 // Handle unknown commands
 program.on('command:*', (operands: string[]) => {

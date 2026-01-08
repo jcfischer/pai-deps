@@ -68,6 +68,24 @@ CREATE TABLE IF NOT EXISTS circular_deps (
   detected_at TEXT NOT NULL,
   resolved INTEGER DEFAULT 0
 );
+
+-- Tool verifications table: verification history for tools
+CREATE TABLE IF NOT EXISTS tool_verifications (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  tool_id TEXT NOT NULL REFERENCES tools(id) ON DELETE CASCADE,
+  verified_at TEXT NOT NULL,
+  cli_status TEXT,
+  cli_passed INTEGER,
+  cli_failed INTEGER,
+  cli_skipped INTEGER,
+  mcp_status TEXT,
+  mcp_found INTEGER,
+  mcp_missing INTEGER,
+  mcp_extra INTEGER,
+  overall_status TEXT NOT NULL,
+  git_commit TEXT,
+  duration_ms INTEGER
+);
 `;
 
 /**
@@ -88,6 +106,10 @@ CREATE INDEX IF NOT EXISTS idx_contracts_tool ON contracts(tool_id);
 
 -- Verifications indexes
 CREATE INDEX IF NOT EXISTS idx_verifications_contract ON verifications(contract_id);
+
+-- Tool verifications indexes
+CREATE INDEX IF NOT EXISTS idx_tool_verifications_tool ON tool_verifications(tool_id);
+CREATE INDEX IF NOT EXISTS idx_tool_verifications_verified ON tool_verifications(verified_at);
 `;
 
 /**

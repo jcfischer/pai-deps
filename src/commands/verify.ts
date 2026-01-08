@@ -7,11 +7,24 @@
 import type { Command } from 'commander';
 import { join } from 'node:path';
 import { existsSync } from 'node:fs';
-import { getDb, tools } from '../db/index.js';
+import { execSync } from 'node:child_process';
+import { eq } from 'drizzle-orm';
+import { getDb, tools, toolVerifications } from '../db/index.js';
 import { getGlobalOptions, error as logError, warn } from '../lib/output.js';
 import { verifyTool, type ToolVerifyResult, type VerifyOptions } from '../lib/verifier.js';
 import { verifyMcpTool, type McpVerifyResult } from '../lib/mcp-verifier.js';
 import { parseManifest } from '../lib/manifest.js';
+
+/**
+ * Get current git commit hash (short form)
+ */
+function getGitCommit(): string | null {
+  try {
+    return execSync('git rev-parse --short HEAD', { encoding: 'utf-8' }).trim();
+  } catch {
+    return null;
+  }
+}
 
 /**
  * Options for verify command
@@ -22,6 +35,7 @@ interface VerifyCommandOptions {
   timeout?: string;
   mcpOnly?: boolean;
   cliOnly?: boolean;
+  noSave?: boolean;
 }
 
 /**
@@ -168,6 +182,7 @@ export function verifyCommand(program: Command): void {
     .option('--timeout <ms>', 'Timeout per command in milliseconds', '5000')
     .option('--mcp-only', 'Only verify MCP tools (skip CLI)')
     .option('--cli-only', 'Only verify CLI commands (skip MCP)')
+    .option('--no-save', 'Do not save verification results to history')
     .action(async (toolId: string | undefined, options: VerifyCommandOptions) => {
       const opts = getGlobalOptions();
       const db = getDb();
@@ -301,6 +316,39 @@ export function verifyCommand(program: Command): void {
                 }
               }
             }
+          }
+
+          // Store verification result (unless --no-save)
+          if (!options.noSave) {
+            const now = new Date().toISOString();
+            const gitCommit = getGitCommit();
+
+            // Determine overall status
+            const cliFailed = combined.cli?.summary.failed ?? 0;
+            const mcpMissing = combined.mcp?.summary.missing ?? 0;
+            const overallStatus = cliFailed > 0 || mcpMissing > 0 ? 'fail' : 'pass';
+
+            // Insert verification record
+            db.insert(toolVerifications).values({
+              toolId: tool.id,
+              verifiedAt: now,
+              cliStatus: combined.cli ? (combined.cli.summary.failed > 0 ? 'fail' : 'pass') : null,
+              cliPassed: combined.cli?.summary.passed ?? null,
+              cliFailed: combined.cli?.summary.failed ?? null,
+              cliSkipped: combined.cli?.summary.skipped ?? null,
+              mcpStatus: combined.mcp ? (combined.mcp.summary.missing > 0 ? 'fail' : 'pass') : null,
+              mcpFound: combined.mcp?.summary.found ?? null,
+              mcpMissing: combined.mcp?.summary.missing ?? null,
+              mcpExtra: combined.mcp?.summary.extra ?? null,
+              overallStatus,
+              gitCommit,
+            }).run();
+
+            // Update tool's lastVerified timestamp
+            db.update(tools)
+              .set({ lastVerified: now, updatedAt: now })
+              .where(eq(tools.id, tool.id))
+              .run();
           }
         }
 

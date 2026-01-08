@@ -112,6 +112,43 @@ export const verifications = sqliteTable('verifications', {
 }));
 
 /**
+ * Tool verifications table - verification history for tools
+ */
+export const toolVerifications = sqliteTable('tool_verifications', {
+  /** Auto-incrementing primary key */
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  /** ID of the tool being verified (FK to tools.id) */
+  toolId: text('tool_id').notNull().references(() => tools.id, { onDelete: 'cascade' }),
+  /** ISO timestamp of verification */
+  verifiedAt: text('verified_at').notNull(),
+  /** CLI verification status: pass | fail | skipped */
+  cliStatus: text('cli_status'),
+  /** Number of CLI commands passed */
+  cliPassed: integer('cli_passed'),
+  /** Number of CLI commands failed */
+  cliFailed: integer('cli_failed'),
+  /** Number of CLI commands skipped */
+  cliSkipped: integer('cli_skipped'),
+  /** MCP verification status: pass | fail | skipped */
+  mcpStatus: text('mcp_status'),
+  /** Number of MCP tools found */
+  mcpFound: integer('mcp_found'),
+  /** Number of MCP tools missing */
+  mcpMissing: integer('mcp_missing'),
+  /** Number of extra MCP tools */
+  mcpExtra: integer('mcp_extra'),
+  /** Overall status: pass | fail */
+  overallStatus: text('overall_status').notNull(),
+  /** Git commit hash at verification time (nullable) */
+  gitCommit: text('git_commit'),
+  /** Duration of verification in milliseconds */
+  durationMs: integer('duration_ms'),
+}, (table) => ({
+  toolIdx: index('idx_tool_verifications_tool').on(table.toolId),
+  verifiedIdx: index('idx_tool_verifications_verified').on(table.verifiedAt),
+}));
+
+/**
  * Circular dependencies table - detected cycles
  */
 export const circularDeps = sqliteTable('circular_deps', {
@@ -136,3 +173,5 @@ export type VerificationRecord = typeof verifications.$inferSelect;
 export type NewVerificationRecord = typeof verifications.$inferInsert;
 export type CircularDepRecord = typeof circularDeps.$inferSelect;
 export type NewCircularDepRecord = typeof circularDeps.$inferInsert;
+export type ToolVerificationRecord = typeof toolVerifications.$inferSelect;
+export type NewToolVerificationRecord = typeof toolVerifications.$inferInsert;
