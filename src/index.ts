@@ -20,6 +20,7 @@ import { verifyOutputCommand } from './commands/verify-output.js';
 import { affectedCommand } from './commands/affected.js';
 import { chainReliabilityCommand } from './commands/chain-reliability.js';
 import { verifyHistoryCommand } from './commands/verify-history.js';
+import { blastRadiusCommand } from './commands/blast-radius.js';
 
 // Version is embedded at import time (works with bun compile)
 import packageJson from '../package.json';
@@ -101,6 +102,9 @@ chainReliabilityCommand(program);
 
 // Verify history command (verification history query)
 verifyHistoryCommand(program);
+
+// Blast radius command (impact analysis)
+blastRadiusCommand(program);
 
 // Handle unknown commands
 program.on('command:*', (operands: string[]) => {
