@@ -18,6 +18,7 @@ import { syncCommand } from './commands/sync.js';
 import { driftCommand } from './commands/drift.js';
 import { verifyOutputCommand } from './commands/verify-output.js';
 import { affectedCommand } from './commands/affected.js';
+import { chainReliabilityCommand } from './commands/chain-reliability.js';
 
 // Version is embedded at import time (works with bun compile)
 import packageJson from '../package.json';
@@ -93,6 +94,9 @@ verifyOutputCommand(program);
 
 // Affected command (what breaks if this changes)
 affectedCommand(program);
+
+// Chain reliability command (compound reliability calculation)
+chainReliabilityCommand(program);
 
 // Handle unknown commands
 program.on('command:*', (operands: string[]) => {
