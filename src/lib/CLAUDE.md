@@ -10,6 +10,7 @@ Library modules containing the core functionality. All exports are re-exported f
 | `output.ts` | Logging utilities, global options management |
 | `verifier.ts` | CLI contract verification (runs commands with --help) |
 | `hasher.ts` | JSON normalization and SHA256 hashing for drift detection |
+| `validator.ts` | JSON Schema validation using Ajv for output verification |
 | `dot.ts` | DOT graph generation for Graphviz |
 | `discovery.ts` | Filesystem traversal to find pai-manifest.yaml files |
 | `analyzer.ts` | Source code analysis for auto-generating manifests |
@@ -54,6 +55,23 @@ const comparison = compareHashes(storedHash, currentHash);
 // { status: 'unchanged' | 'drift' | 'new' | 'missing' | 'error' }
 ```
 
+### Schema Validation
+```typescript
+import { validateAgainstSchema, loadContractSchema, formatValidationErrors } from './validator.js';
+
+// Validate data against a schema
+const result = validateAgainstSchema(schema, data);
+if (!result.valid) {
+  console.log(formatValidationErrors(result.errors!));
+}
+
+// Load schema from a contract
+const schemaResult = await loadContractSchema('email-mcp', 'email_search');
+if (schemaResult.success) {
+  const validation = validateAgainstSchema(schemaResult.schema!, outputData);
+}
+```
+
 ### DOT Generation
 ```typescript
 import { generateDot } from './dot.js';
@@ -73,6 +91,7 @@ All public APIs are re-exported from `./index.ts`:
 - DependencyGraph class
 - DOT generation
 - Schema hasher functions
+- Schema validator functions
 
 ## Adding New Modules
 

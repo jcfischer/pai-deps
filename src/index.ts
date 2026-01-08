@@ -16,6 +16,7 @@ import { allpathsCommand } from './commands/allpaths.js';
 import { discoverCommand } from './commands/discover.js';
 import { syncCommand } from './commands/sync.js';
 import { driftCommand } from './commands/drift.js';
+import { verifyOutputCommand } from './commands/verify-output.js';
 
 // Version is embedded at import time (works with bun compile)
 import packageJson from '../package.json';
@@ -85,6 +86,9 @@ syncCommand(program);
 
 // Drift command (schema drift detection)
 driftCommand(program);
+
+// Verify-output command (runtime output validation)
+verifyOutputCommand(program);
 
 // Handle unknown commands
 program.on('command:*', (operands: string[]) => {

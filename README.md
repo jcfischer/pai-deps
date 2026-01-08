@@ -91,6 +91,7 @@ debt_score: 4
 | `graph` | Generate DOT/SVG visualization of dependencies |
 | `verify [tool]` | Verify CLI contracts against actual implementations |
 | `drift [tool]` | Check for schema drift in contracts |
+| `verify-output <tool> <contract>` | Validate output against JSON schema |
 | `path <from> <to>` | Find shortest dependency path between tools |
 | `allpaths <from> <to>` | Find all dependency paths between tools |
 | `discover [roots...]` | Find all pai-manifest.yaml files |
@@ -119,7 +120,7 @@ pai-deps/
 │   │   ├── discovery.ts  # Manifest discovery
 │   │   └── analyzer.ts   # Source code analysis
 │   └── commands/         # CLI command handlers
-└── tests/                # 301 tests
+└── tests/                # 315 tests
 ```
 
 ## Development

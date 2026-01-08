@@ -62,3 +62,14 @@ export {
   type HashResult,
   type DriftResult,
 } from './hasher.js';
+
+// Re-export schema validator
+export {
+  validateAgainstSchema,
+  loadSchemaFile,
+  loadContractSchema,
+  formatValidationErrors,
+  type ValidationError,
+  type ValidationResult,
+  type SchemaLoadResult,
+} from './validator.js';
