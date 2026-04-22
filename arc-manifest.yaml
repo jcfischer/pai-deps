@@ -1,0 +1,51 @@
+schema: arc/v1
+name: pai-deps
+version: 0.1.0
+type: tool
+tier: community
+description: Dependency tracker for PAI tools — auto-discover, graph, and verify what uses what across your tool ecosystem.
+
+author:
+  name: jcfischer
+  github: jcfischer
+
+provides:
+  cli:
+    - command: "bun src/index.ts"
+      name: "pai-deps"
+
+depends_on:
+  tools:
+    - name: bun
+      version: ">=1.0.0"
+
+capabilities:
+  filesystem:
+    read:
+      - "~/.config/pai-deps/"
+      - "~/bin/"
+      - "~/.claude/"
+    write:
+      - "~/.config/pai-deps/"
+  network: []
+  bash:
+    allowed: true
+    restricted_to:
+      - "bun src/index.ts *"
+      - "pai-deps *"
+  secrets: []
+
+bundle:
+  exclude:
+    # compiled binary — built locally via `bun build --compile`
+    - pai-deps
+    # bun compile cache
+    - ".*.bun-build"
+    - "*.bun-build"
+    # dev artefacts
+    - bun.lock
+    - tests
+    - .specify
+    # archived tarballs
+    - "*.tar.gz"
+    - "*.tgz"
